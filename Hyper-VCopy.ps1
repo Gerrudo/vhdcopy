@@ -1,8 +1,8 @@
 ﻿$CurrentDate = get-date -format "dd/MM/yyyy HH:mm:ss"
 
-$CurrentDateLogs = get-date -format "yyyy/MM/dd HH:mm:ss"
+$CurrentDateLogs = get-date -format "yyyy/MM/dd"
 
-$path = "C:\BackupLogs\$CurrentDateLogs.txt"
+$path = "C:\BackupLogs\$CurrentDateLogs+'BackupLogs'.txt"
 
 Start-Transcript -Path $path -Force
 
@@ -15,6 +15,8 @@ echo "All Files Copied to Hyper-V Copy"
 
 Stop-Transcript
 
+$CurrentDateMsg = get-date -format "dd/MM/yyyy HH:mm:ss"
+
 # Embed with title, description, and color
 
 #Store webhook url
@@ -25,7 +27,7 @@ $webHookUrl = 'https://discordapp.com/api/webhooks/498468005072863233/RQLROSwcRn
 
 #Store embed values
 $title       = $env:COMPUTERNAME
-$description = 'VHD backup completed at: ' + $CurrentDate 
+$description = 'VHD backup completed at: ' + $CurrentDateMsg 
 $color       = '3722357'
 
 #Create embed object
