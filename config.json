@@ -1,0 +1,8 @@
+{
+    "storageAccountName":"",
+    "storageAccountKey":"",
+    "containerName":"",
+    "blob":"backup",
+    "path":"",
+    "webHookUrl":""
+}
