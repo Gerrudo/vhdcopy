@@ -27,7 +27,7 @@ function Start-BlobBackup {
         $embedObject = [PSCustomObject]@{
             color = "8311585"
             title = "YubiYubi Minecraft Server Backup Status"
-            description = "Backup Complete for: $config.path"
+            description = "Backup Complete for: $($config.path)"
         }
         Write-Host "Backup Complete."
     }
