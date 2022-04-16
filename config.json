@@ -1,8 +1,5 @@
 {
-    "storageAccountName":"",
     "storageAccountKey":"",
-    "containerName":"",
-    "blob":"",
     "path":"",
     "webHookUrl":""
 }

@@ -1,4 +1,4 @@
-function Send-ToDiscord{
+function Send-ToDiscord {
     param (
         [Parameter(Mandatory)][string]$webHookUrl,
         [Parameter(Mandatory)][string]$description
@@ -16,15 +16,14 @@ function Send-ToDiscord{
     }
     Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json) -Method Post -ContentType 'application/json'
 }
-function Start-BlobUpload {
+function Start-BlobBackup {
     param (
         [Parameter(Mandatory)][string]$config
     )
 }
 try {
     Write-Host "Uploading Current File to Storage Account..."
-    $Context = New-AzStorageContext -StorageAccountName $config.storageAccountName -StorageAccountKey $config.storageAccountKey
-    Set-AzStorageBlobContent -Container $config.containerName -File $config.path -Blob $config.blob -Context $Context -Force
+    azcopy sync $config.path $backupkey --recursive=true
     Write-Host "Upload Complete."
     Send-ToDiscord -webHookUrl $config.webHookUrl -description "Upload Complete."
 }
