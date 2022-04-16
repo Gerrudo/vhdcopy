@@ -2,4 +2,4 @@
     "blobSasUrl":"https://gerrudominecraftbackups.blob.core.windows.net/test?sp=racwdli&st=2022-04-16T13:39:28Z&se=2022-04-16T21:39:28Z&spr=https&sv=2020-08-04&sr=c&sig=ZuKo%2Fp4ZIhVjGsklk%2FPFjS7mkjJJK%2FVM8NBnKFoZieI%3D",
     "path":"./test/",
     "webHookUrl":"https://discord.com/api/webhooks/964883974990225429/5aqspM-mMLT5YJrkR1X7RuN6-jk2hqJM01Nfqg-OWoPutIHQbaPBib5ePnF0jMDtrPWn" 
-}
+} 
