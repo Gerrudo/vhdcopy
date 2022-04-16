@@ -1,4 +1,5 @@
 function Send-ToDiscord {
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory)][string]$webHookUrl,
         [Parameter(Mandatory)][string]$description
@@ -17,6 +18,7 @@ function Send-ToDiscord {
     Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json) -Method Post -ContentType 'application/json'
 }
 function Start-BlobBackup {
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory)][string]$configPath
     )
