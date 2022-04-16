@@ -23,7 +23,7 @@ function Start-BlobBackup {
 }
 try {
     Write-Host "Uploading Current File to Storage Account..."
-    azcopy sync $config.path $backupkey --recursive=true
+    azcopy sync $config.path $config.blobSasUrl --recursive=true
     Write-Host "Upload Complete."
     Send-ToDiscord -webHookUrl $config.webHookUrl -description "Upload Complete."
 }
