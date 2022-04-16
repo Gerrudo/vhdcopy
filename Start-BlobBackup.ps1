@@ -6,16 +6,16 @@ function Send-ToDiscord {
     )
     try {
         $payload = [PSCustomObject]@{
-            $title       = $env:COMPUTERNAME
-            $description = $description
-            $color       = "3722357"
+            title       = 'Backup Status'
+            description = $description
+            color       = "3722357"
         }
+        Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json) -Method Post -ContentType 'application/json'
         Write-Host "Notification sent to Discord."
     }
     catch {
         throw "Failed sending notifation to Discord: $($PSItem.Exception.Message)"
     }
-    Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json) -Method Post -ContentType 'application/json'
 }
 function Start-BlobBackup {
     [CmdletBinding()]
@@ -34,3 +34,5 @@ function Start-BlobBackup {
         throw "Error Uploading Current File to Storage Account: $($PSItem.Exception.Message)"
     }
 }
+
+Start-BlobBackup -configPath "usr/tom/test"
