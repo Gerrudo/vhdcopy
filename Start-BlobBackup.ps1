@@ -18,16 +18,17 @@ function Send-ToDiscord {
 }
 function Start-BlobBackup {
     param (
-        [Parameter(Mandatory)][string]$config
+        [Parameter(Mandatory)][string]$configPath
     )
-}
-try {
-    Write-Host "Uploading Current File to Storage Account..."
-    azcopy sync $config.path $config.blobSasUrl --recursive=true
-    Write-Host "Upload Complete."
-    Send-ToDiscord -webHookUrl $config.webHookUrl -description "Upload Complete."
-}
-catch {
-    Send-ToDiscord -webHookUrl $config.webHookUrl -description "Error Uploading Current File to Storage Account: $($PSItem.Exception.Message)"
-    throw "Error Uploading Current File to Storage Account: $($PSItem.Exception.Message)"
+    $config = (Get-Content $configPath | ConvertFrom-Json)
+    try {
+        Write-Host "Uploading Current File to Storage Account..."
+        azcopy sync $config.path $config.blobSasUrl --recursive=true
+        Write-Host "Upload Complete."
+        Send-ToDiscord -webHookUrl $config.webHookUrl -description "Upload Complete."
+    }
+    catch {
+        Send-ToDiscord -webHookUrl $config.webHookUrl -description "Error Uploading Current File to Storage Account: $($PSItem.Exception.Message)"
+        throw "Error Uploading Current File to Storage Account: $($PSItem.Exception.Message)"
+    }
 }
