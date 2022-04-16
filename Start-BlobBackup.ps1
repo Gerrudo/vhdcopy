@@ -10,7 +10,8 @@ function Send-ToDiscord {
             description = $description
             color       = "3722357"
         }
-        Invoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json) -Method Post -ContentType 'application/json'
+
+        Invoke-RestMethod -Uri $webHookUrl -Method Post -Body ($payload | ConvertTo-Json)
         Write-Host "Notification sent to Discord."
     }
     catch {
@@ -34,5 +35,3 @@ function Start-BlobBackup {
         throw "Error Uploading Current File to Storage Account: $($PSItem.Exception.Message)"
     }
 }
-
-Start-BlobBackup -configPath "usr/tom/test"
