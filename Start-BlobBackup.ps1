@@ -37,7 +37,7 @@ function Start-BlobBackup {
             title = 'YubiYubi Minecraft Server Backup Status'
             description = 'Error Uploading Current File to Storage Account:'+'```'+$($PSItem.Exception.Message)+'```'
         }
-        Write-Error 'Upload Failed: '+$($PSItem.Exception.Message)
+        Write-Error "Upload Failed: +$($PSItem.Exception.Message)"
     }
     Send-ToDiscord -webHookUrl $config.webHookUrl -embedObject $embedObject
 }
