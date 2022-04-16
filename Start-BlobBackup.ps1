@@ -1,37 +1,43 @@
 function Send-ToDiscord {
-    [CmdletBinding()]
     param (
         [Parameter(Mandatory)][string]$webHookUrl,
-        [Parameter(Mandatory)][string]$description
+        [Parameter(Mandatory)][PSCustomObject]$embedObject
     )
     try {
+        $embedArray = @()
+        $embedArray += ($embedObject)
         $payload = [PSCustomObject]@{
-            title       = 'Backup Status'
-            description = $description
-            color       = "3722357"
+            embeds = $embedArray
         }
-
-        Invoke-RestMethod -Uri $webHookUrl -Method Post -Body ($payload | ConvertTo-Json)
-        Write-Host "Notification sent to Discord."
+        Invoke-RestMethod -Uri $webHookUrl -ContentType 'Application/Json' -Method Post -Body ($payload | ConvertTo-Json)
+        Write-Host 'Notification sent to Discord.'
     }
     catch {
-        throw "Failed sending notifation to Discord: $($PSItem.Exception.Message)"
+        throw 'Failed sending notifation to Discord: $($PSItem.Exception.Message)'
     }
 }
 function Start-BlobBackup {
-    [CmdletBinding()]
     param (
         [Parameter(Mandatory)][string]$configPath
     )
     $config = (Get-Content $configPath | ConvertFrom-Json)
     try {
-        Write-Host "Uploading Current File to Storage Account..."
+        Write-Host 'Uploading Current File to Storage Account...'
         azcopy sync $config.path $config.blobSasUrl --recursive=true
-        Write-Host "Upload Complete."
-        Send-ToDiscord -webHookUrl $config.webHookUrl -description "Upload Complete."
+        $embedObject = [PSCustomObject]@{
+            color = '8311585'
+            title = 'YubiYubi Minecraft Server Backup Status'
+            description = 'Upload Complete.'
+        }
+        Write-Host 'Upload Complete.'
     }
     catch {
-        Send-ToDiscord -webHookUrl $config.webHookUrl -description "Error Uploading Current File to Storage Account: $($PSItem.Exception.Message)"
-        throw "Error Uploading Current File to Storage Account: $($PSItem.Exception.Message)"
+        $embedObject = [PSCustomObject]@{
+            color = '13632027'
+            title = 'YubiYubi Minecraft Server Backup Status'
+            description = 'Error Uploading Current File to Storage Account:'+'```'+$($PSItem.Exception.Message)+'```'
+        }
+        Write-Error 'Upload Failed: '+$($PSItem.Exception.Message)
     }
+    Send-ToDiscord -webHookUrl $config.webHookUrl -embedObject $embedObject
 }
