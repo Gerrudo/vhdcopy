@@ -26,11 +26,16 @@ function Start-BlobBackup {
     $config = (Get-Content $configPath | ConvertFrom-Json)
     try {
         Write-Host "Uploading Current File to Storage Account..."
-        azcopy sync $config.path $config.blobSasUrl --recursive=true
+        $response = azcopy sync $config.path $config.blobSasUrl --recursive=true
+        
+        if ($LASTEXITCODE -ne 0) {
+            throw $response
+        }
+
         $embedObject = [PSCustomObject]@{
             color = "8311585"
             title = "YubiYubi Minecraft Server Backup Status"
-            description = "Backup Complete for: $($config.path)"
+            description = "Backup Complete for: $($config.path) $($response.Status)"
         }
         Write-Host "Backup Complete."
     }
@@ -38,9 +43,9 @@ function Start-BlobBackup {
         $embedObject = [PSCustomObject]@{
             color = "13632027"
             title = "YubiYubi Minecraft Server Backup Status"
-            description = "<@217741134363885568> Error Uploading Current File to Storage Account: "+'```'+"$($PSItem.Exception.Message)"+'```'
+            description = "<@217741134363885568> Error Uploading $($config.path) to Storage Account: "+'```'+"$($PSItem.Exception.Message)"+'```'
         }
-        Write-Error "Upload Failed: $($PSItem.Exception.Message)"
+        Write-Warning "Upload Failed: $($PSItem.Exception.Message)"
     }
     Send-ToDiscord -webHookUrl $config.webHookUrl -embedObject $embedObject
 }
