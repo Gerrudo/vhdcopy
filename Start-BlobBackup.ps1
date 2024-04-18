@@ -1,3 +1,5 @@
+$ErrorActionPreference = "Stop"
+
 function Send-ToDiscord {
     param (
         [Parameter(Mandatory)][string]$webHookUrl,
@@ -16,6 +18,7 @@ function Send-ToDiscord {
         throw "Failed sending notifation to Discord: $($PSItem.Exception.Message)"
     }
 }
+
 function Start-BlobBackup {
     param (
         [Parameter(Mandatory)][string]$configPath
