@@ -47,5 +47,9 @@ function Start-BlobBackup {
         }
         Write-Warning "Upload Failed: $($PSItem.Exception.Message)"
     }
+
+    #Discord message char limit
+    $embedObject.description -replace '^(.{0,4096}).*','$1'
+
     Send-ToDiscord -webHookUrl $config.webHookUrl -embedObject $embedObject
 }
