@@ -25,7 +25,7 @@ function Start-BlobBackup {
     )
     $config = (Get-Content $configPath | ConvertFrom-Json)
     try {
-        Write-Host "Uploading Current File to Storage Account..."
+        Write-Host "Uploading $($config.path) to Storage Account..."
         $response = azcopy sync $config.path $config.blobSasUrl --recursive=true
         
         if ($LASTEXITCODE -ne 0) {
